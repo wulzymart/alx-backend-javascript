@@ -1,4 +1,6 @@
 export default function cleanSet(set, startString) {
-  return (startString === '' || !startString) ? ''
-    : [...set].filter((element) => element.startsWith(startString)).map((element) => element.split(startString)[1]).join('-');
+  if (startString === '' || !startString) return '';
+  const list = [...set].filter((element) => (element ? element.startsWith(startString) : '')).map((element) => (element ? element.split(startString)[1] : ''));
+  if (list.includes('')) return '';
+  return list.join('-');
 }
