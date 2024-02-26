@@ -1,4 +1,4 @@
-import readDatabase from "../utils";
+import readDatabase from '../utils';
 
 const cmp = (a, b) => {
   a = a.toLowerCase();
@@ -11,53 +11,54 @@ const cmp = (a, b) => {
   }
   return 0;
 };
-const MAJORS = ["CS", "SWE"];
+const MAJORS = ['CS', 'SWE'];
 
 class StudentsController {
   static getAllStudents(request, response) {
-    const path = process.argv.length > 2 ? process.argv[2] : "";
-    const start = "This is the list of our students\n";
+    const path = process.argv.length > 2 ? process.argv[2] : '';
+    const start = 'This is the list of our students\n';
 
     readDatabase(path)
       .then((data) => {
-        let string = "";
+        let string = '';
         for (const [field, students] of Object.entries(data)) {
           const firstNames = students
             .map((student) => student.firstname)
             .sort(cmp);
           string += `Number of students in ${field}: ${
             firstNames.length
-          }. List: ${firstNames.join(", ")}\n`;
+          }. List: ${firstNames.join(', ')}\n`;
         }
         response.send(start + string.slice(0, -1));
       })
       .catch(() => {
-        response.status(500).send(start + "Cannot load the database");
+        response.status(500).send(`${start}Cannot load the database`);
       });
   }
+
   static getAllStudentsByMajor(request, response) {
-    const path = process.argv.length > 2 ? process.argv[2] : "";
-    const start = "This is the list of our students\n";
+    const path = process.argv.length > 2 ? process.argv[2] : '';
+    const start = 'This is the list of our students\n';
     const { major } = request.params;
 
     if (!MAJORS.includes(major)) {
-      return response.status(500).send("Major parameter must be CS or SWE");
+      return response.status(500).send('Major parameter must be CS or SWE');
     }
     readDatabase(path)
       .then((data) => {
         const students = data[major];
-        let string = "";
+        let string = '';
         if (students) {
           const firstnames = students
             .map((student) => student.firstname)
             .sort(cmp);
-          string += `List: ${firstnames.join(", ")}\n`;
+          string += `List: ${firstnames.join(', ')}\n`;
         }
-        response.send(start + string ? string.slice(0, -1) : "");
+        response.send(start + string ? string.slice(0, -1) : '');
       })
       .catch((err) => {
         console.log(err);
-        response.status(500).send(start + "Cannot load the database");
+        response.status(500).send(`${start}Cannot load the database`);
       });
   }
 }
