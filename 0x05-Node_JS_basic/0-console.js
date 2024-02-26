@@ -1,3 +1,8 @@
-module.exports = function displayMessage(message) {
-  process.stdout.write(message + "\n");
+/**
+ * Displays a message on the STDOUT.
+ */
+const displayMessage = (msg) => {
+  console.log(msg);
 };
+
+module.exports = displayMessage;
