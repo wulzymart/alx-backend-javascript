@@ -9,7 +9,7 @@ async function countStudents(path) {
       let colTitles;
       let length = 0;
       const fields = {};
-      let string = '';
+      const strings = [];
       if (db && db[0]) {
         colTitles = db[0].split(',');
         if (colTitles.length !== 4) return reject(Error('Cannot load the database'));
@@ -27,13 +27,13 @@ async function countStudents(path) {
           } else fields[field] = [firstName];
         }
       });
-      string += `Number of students: ${length}\n`;
+      strings.push(`Number of students: ${length}`);
       Object.entries(fields).forEach(([field, values]) => {
-        string += `Number of students in ${field}: ${
+        strings.push(`Number of students in ${field}: ${
           values.length
-        }. List: ${values.join(', ')}\n`;
+        }. List: ${values.join(', ')}`);
       });
-      return resolve(string);
+      return resolve(strings.join('\n'));
     });
   });
 }
