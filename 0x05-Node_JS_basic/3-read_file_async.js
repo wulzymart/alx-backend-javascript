@@ -14,9 +14,9 @@ module.exports = async function countStudents(path) {
         if (colTitles[3] !== 'field') return reject(Error('Cannot load the database'));
       } else return reject(Error('Cannot load the database'));
       const entries = db.slice(1);
-      for (const entry of entries) {
+      entries.forEach((entry) => {
         if (entry) {
-          length++;
+          length += 1;
           const itemArray = entry.split(',');
           const firstName = itemArray[0];
           const field = itemArray[3];
@@ -24,16 +24,16 @@ module.exports = async function countStudents(path) {
             fields[field].push(firstName);
           } else fields[field] = [firstName];
         }
-      }
+      });
       console.log(`Number of students: ${length}`);
-      for (const [field, values] of Object.entries(fields)) {
+      Object.entries(fields).forEach(([field, values]) => {
         console.log(
           `Number of students in ${field}: ${
             values.length
           }. List: ${values.join(', ')}`,
         );
-      }
-      resolve();
+      });
+      return resolve();
     });
   });
 };

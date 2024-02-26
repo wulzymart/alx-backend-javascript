@@ -8,4 +8,3 @@ const routes = (app) => {
 };
 
 export default routes;
-module.exports = routes;

@@ -5,7 +5,6 @@ const readDatabase = async (path) => new Promise((resolve, reject) => {
     if (err) return reject(Error('Cannot load the database'));
     const db = dbString.split('\n');
     let colTitles;
-    let length = 0;
     const fields = {};
     if (db && db[0]) {
       colTitles = db[0].split(',');
@@ -13,22 +12,21 @@ const readDatabase = async (path) => new Promise((resolve, reject) => {
       if (colTitles[3] !== 'field') return reject(Error('Cannot load the database'));
     } else return reject(Error('Cannot load the database'));
     const entries = db.slice(1);
-    for (const entry of entries) {
+    entries.forEach((entry) => {
       if (entry) {
-        length++;
         const itemArray = entry.split(',');
         const keyValues = [];
-        for (const i in itemArray.slice(0, -1)) {
-          keyValues.push([colTitles[i], itemArray[i]]);
-        }
+        itemArray.slice(0, -1).forEach((item, i) => {
+          keyValues.push([colTitles[i], item]);
+        });
         const field = itemArray[3];
         if (Object.keys(fields).includes(field)) {
           fields[field].push(Object.fromEntries(keyValues));
         } else fields[field] = [Object.fromEntries(keyValues)];
       }
-    }
+    });
 
-    resolve(fields);
+    return resolve(fields);
   });
 });
 
