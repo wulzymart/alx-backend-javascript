@@ -62,11 +62,11 @@ app.get('/students', (req, res) => {
   const start = 'This is the list of our students\n';
   countStudents(process.argv.length > 2 ? process.argv[2] : '')
     .then((string) => {
-      const resp = start + string.slice(0, -1);
+      const resp = start + string;
       res.setHeader('Content-Type', 'text/plain');
       res.setHeader('Content-Length', resp.length);
       res.statusCode = 200;
-      res.send();
+      res.send(resp);
     })
     .catch(() => {
       const resp = `${start}Cannot load the database`;
