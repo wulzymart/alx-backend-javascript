@@ -1,21 +1,15 @@
 import readDatabase from '../utils';
 
-/**
- * The list of supported majors.
- */
-const VALID_MAJORS = ['CS', 'SWE'];
+const majors = ['CS', 'SWE'];
 
-/**
- * Contains the student-related route handlers.
- * @author Bezaleel Olakunori <https://github.com/B3zaleel>
- */
 class StudentsController {
   static getAllStudents(request, response) {
     const dataPath = process.argv.length > 2 ? process.argv[2] : '';
 
     readDatabase(dataPath)
-      .then((studentGroups) => {
-        const responseParts = ['This is the list of our students'];
+      .then((fields) => {
+        const start = 'This is the list of our students';
+        const strings = [start];
         // A comparison function for ordering a list of strings in ascending
         // order by alphabetic order and case insensitive
         const cmpFxn = (a, b) => {
@@ -28,14 +22,14 @@ class StudentsController {
           return 0;
         };
 
-        for (const [field, group] of Object.entries(studentGroups).sort(cmpFxn)) {
-          responseParts.push([
-            `Number of students in ${field}: ${group.length}.`,
+        Object.entries(fields).sort(cmpFxn).forEach(([field, students]) => {
+          strings.push([
+            `Number of students in ${field}: ${students.length}.`,
             'List:',
-            group.map((student) => student.firstname).join(', '),
+            students.map((student) => student.firstname).join(', '),
           ].join(' '));
-        }
-        response.status(200).send(responseParts.join('\n'));
+        });
+        response.status(200).send(strings.join('\n'));
       })
       .catch((err) => {
         response
@@ -48,17 +42,17 @@ class StudentsController {
     const dataPath = process.argv.length > 2 ? process.argv[2] : '';
     const { major } = request.params;
 
-    if (!VALID_MAJORS.includes(major)) {
+    if (!majors.includes(major)) {
       response.status(500).send('Major parameter must be CS or SWE');
       return;
     }
     readDatabase(dataPath)
-      .then((studentGroups) => {
+      .then((fields) => {
         let responseText = '';
 
-        if (Object.keys(studentGroups).includes(major)) {
-          const group = studentGroups[major];
-          responseText = `List: ${group.map((student) => student.firstname).join(', ')}`;
+        if (Object.keys(fields).includes(major)) {
+          const students = fields[major];
+          responseText = `List: ${students.map((student) => student.firstname).join(', ')}`;
         }
         response.status(200).send(responseText);
       })
@@ -71,4 +65,3 @@ class StudentsController {
 }
 
 export default StudentsController;
-module.exports = StudentsController;
