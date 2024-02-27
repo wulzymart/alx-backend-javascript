@@ -60,17 +60,21 @@ app.get('/', (req, res) => {
 
 app.get('/students', (req, res) => {
   const start = 'This is the list of our students\n';
-  try {
-    countStudents(process.argv[2].toString())
-      .then((string) => {
-        res.send(start + string.slice(0, -1));
-      })
-      .catch(() => {
-        res.status(500).send(`${start}Cannot load the database`);
-      });
-  } catch {
-    res.status(500).send(`${start}Cannot load the database`);
-  }
+  countStudents(process.argv.length > 2 ? process.argv[2] : '')
+    .then((string) => {
+      const resp = start + string.slice(0, -1);
+      res.setHeader('Content-Type', 'text/plain');
+      res.setHeader('Content-Length', resp.length);
+      res.statusCode = 200;
+      res.send();
+    })
+    .catch(() => {
+      const resp = `${start}Cannot load the database`;
+      res.setHeader('Content-Type', 'text/plain');
+      res.setHeader('Content-Length', resp.length);
+      res.statusCode = 200;
+      res.send(resp);
+    });
 });
 app.listen(1245, () => {});
 
