@@ -96,6 +96,7 @@ const handlers = [
 ];
 
 app.on('request', (req, res) => {
+  // eslint-disable-next-line consistent-return
   handlers.forEach((routeHandler) => {
     if (routeHandler.route === req.url) {
       return routeHandler.handler(req, res);
