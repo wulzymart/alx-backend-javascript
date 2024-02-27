@@ -28,10 +28,14 @@ async function countStudents(path) {
         }
       });
       strings.push(`Number of students: ${length}`);
+
+      strings.push(`Number of students: ${length}`);
       Object.entries(fields).forEach(([field, values]) => {
-        strings.push(`Number of students in ${field}: ${
-          values.length
-        }. List: ${values.join(', ')}`);
+        strings.push([
+          `Number of students in ${field}: ${values.length}.`,
+          'List:',
+          values.join(', '),
+        ].join(' '));
       });
       return resolve(strings.join('\n'));
     });
