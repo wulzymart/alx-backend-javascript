@@ -34,7 +34,7 @@ describe('API test', () => {
     });
   });
   it('login valid', (done) => {
-    request.post(`${URL}/login`, { json: { username: 'mart' } }, (_err, res, body) => {
+    request.post(`${URL}/login`, { json: { userName: 'mart' } }, (_err, res, body) => {
       expect(res.statusCode).to.be.equal(200);
       expect(body).to.be.equal('Welcome mart');
       done();
