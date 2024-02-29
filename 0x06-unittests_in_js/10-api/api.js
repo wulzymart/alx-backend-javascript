@@ -20,13 +20,9 @@ app.get('/available_payments', (_req, res) => {
 });
 
 app.post('/login', (req, res) => {
-  let username = '';
+  const { userName } = req.body;
 
-  if (req.body) {
-    username = req.body.userName;
-  }
-
-  res.send(`Welcome ${username}`);
+  res.send(`Welcome ${userName}`);
 });
 
 app.listen(PORT, () => {
